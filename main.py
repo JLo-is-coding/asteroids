@@ -5,6 +5,7 @@ from player import *
 from asteroid import *
 from asteroidfield import *
 from shot import Shot
+from score import Score
 
 def main():
     # ----- Game Start-up -----
@@ -29,6 +30,7 @@ def main():
     Shot.containers = (shots, updatable, drawable)
 
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    score_total = Score()
     asteroid_field = AsteroidField()
 
     # ----- Game Loop -----
@@ -41,11 +43,13 @@ def main():
             collision = object.collide(player)
             if collision:
                 print ("Game over!")
+                print (f"You Scored {score_total.score}")
                 sys.exit()
         for object in asteroids:
             for shot in shots:
                 collision = object.collide(shot)
                 if collision:
+                    score_total.add()
                     object.split()
                     shot.kill()
         screen.fill("black")

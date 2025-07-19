@@ -2,6 +2,7 @@ import pygame
 import random
 from circleshape import CircleShape
 from constants import ASTEROID_MIN_RADIUS
+from score import Score
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
@@ -25,5 +26,3 @@ class Asteroid(CircleShape):
         Asteroid_2 = Asteroid(self.position.x, self.position.y, new_radius)
         Asteroid_1.velocity = (pygame.Vector2(new_velocity_1) * 1.2)
         Asteroid_2.velocity = (pygame.Vector2(new_velocity_2) * 1.2)
-
-        
