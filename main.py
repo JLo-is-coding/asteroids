@@ -4,6 +4,8 @@ from constants import *
 from player import *
 from asteroid import *
 from asteroidfield import *
+from spawnfield import *
+from pick_ups import *
 from shot import Shot
 from score import Score
 
@@ -23,15 +25,21 @@ def main():
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
     shots = pygame.sprite.Group()
+    pickups = pygame.sprite.Group()
 
-    Player.containers = (updatable, drawable)
+    Player.containers =  (updatable, drawable)
     Asteroid.containers = (asteroids, updatable, drawable)
     AsteroidField.containers = (updatable)
     Shot.containers = (shots, updatable, drawable)
+    Spawnfield.containers = (updatable)
+    Pickup.containers = (pickups, drawable)
 
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     score_total = Score()
     asteroid_field = AsteroidField()
+    spawn_field = Spawnfield()
+    spawn_field.pickup_group = pickups
+    spawn_field.drawable_group = drawable
 
     # ----- Game Loop -----
     while 0 < 1:
@@ -43,7 +51,7 @@ def main():
             collision = object.collide(player)
             if collision:
                 print ("Game over!")
-                print (f"You Scored {score_total.score}")
+                print (f"You Destroyed {score_total.score} Asteroids")
                 sys.exit()
         for object in asteroids:
             for shot in shots:
