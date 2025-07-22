@@ -60,6 +60,12 @@ def main():
                     score_total.add()
                     object.split()
                     shot.kill()
+        for object in pickups:
+            collision = object.collide(player)
+            if collision:
+                object.kill()
+                player.boosted = True
+                player.boost_timer = 10
         screen.fill("black")
         for item in drawable:
             item.draw(screen)
