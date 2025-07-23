@@ -8,6 +8,7 @@ from spawnfield import *
 from pick_ups import *
 from shot import Shot
 from score import Score
+from alphabet import *
 
 def main():
     # ----- Game Start-up -----
@@ -41,6 +42,9 @@ def main():
     spawn_field.pickup_group = pickups
     spawn_field.drawable_group = drawable
 
+    print ("about to make P_letter object") # debug
+    P = P_letter(500, 30)
+    print (f"P_letter at {P.position}") # debug
     # ----- Game Loop -----
     while 0 < 1:
         for event in pygame.event.get():
@@ -69,6 +73,7 @@ def main():
         screen.fill("black")
         for item in drawable:
             item.draw(screen)
+        P.draw(screen)
         pygame.display.flip()
         dt = Clock.tick(60) / 1000
 
