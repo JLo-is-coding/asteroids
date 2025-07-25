@@ -1,6 +1,6 @@
 import pygame
 
-class letter(pygame.sprite.Sprite):
+class character(pygame.sprite.Sprite):
     def __init__(self, x, y):
         self.position = pygame.Vector2(x, y)
     
@@ -8,21 +8,18 @@ class letter(pygame.sprite.Sprite):
         # Will be replaced by individual letters
         pass
 
-class P_letter(letter):
+class S_letter(character):
     def __init__(self, x, y):
         super().__init__(x, y)
 
     def draw(self, screen):
-        print ("about to draw letter")
         pygame.draw.lines(
             screen, 
             "purple", 
             False, 
             [
                 (self.position.x, self.position.y), 
-                (self.position.x + 24, self.position.y),
-                (self.position.x + 24, self.position.y +26),
-                (self.position.x, self.position.y + 26)
+
                 ],
             2
         )
