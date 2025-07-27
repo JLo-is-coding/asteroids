@@ -35,11 +35,11 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     Spawnfield.containers = (updatable)
     Pickup.containers = (pickups, drawable)
-    character.containers = (drawable,)
-
+    Display.containers = (drawable, updatable)
+ 
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     score_total = Score()
-    score_display = display(500, 60, "score_display")
+    score_display = Display(20, 700, score_total)
     asteroid_field = AsteroidField()
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
@@ -73,10 +73,8 @@ def main():
         screen.fill("black")
         for item in drawable:
             item.draw(screen)
-        score_display.draw(screen)
         pygame.display.flip()
         dt = Clock.tick(60) / 1000
 
 if __name__ == "__main__":
     main()
-

@@ -17,7 +17,7 @@ class Spawnfield(pygame.sprite.Sprite):
     def update(self, dt):
         self.pickup_cooldown += dt
         if self.pickup_cooldown > PICKUP_SPAWN_RATE:
-            pos_x = random.randint(0, SCREEN_WIDTH)
-            pos_y = random.randint(0, SCREEN_HEIGHT)
+            pos_x = random.randint(30, SCREEN_WIDTH-30)
+            pos_y = random.randint(30, SCREEN_HEIGHT-30)
             self.spawn(pos_x, pos_y)
             self.pickup_cooldown = 0.0
