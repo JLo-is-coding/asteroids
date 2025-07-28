@@ -9,7 +9,7 @@ from pick_ups import *
 from shot import Shot
 from score import Score
 from character import *
-from display import *
+from score_display import *
 
 def main():
     # ----- Game Start-up -----
@@ -35,11 +35,11 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     Spawnfield.containers = (updatable)
     Pickup.containers = (pickups, drawable)
-    Display.containers = (drawable, updatable)
+    Score_Display.containers = (drawable, updatable)
  
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
     score_total = Score()
-    score_display = Display(20, 700, score_total)
+    score_display = Score_Display(20, 700, score_total)
     asteroid_field = AsteroidField()
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
