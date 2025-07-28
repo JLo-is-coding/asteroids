@@ -6,12 +6,16 @@ import random
 from shot import Shot
 
 class Player(CircleShape):
-    def __init__(self, x, y):
+    def __init__(self, x, y, score_object):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.shot_timer = 0
+        self.life = 1
+        self.immune_timer = 0
         self.boosted = False
         self.boost_timer = 0
+        self.score_object = score_object
+        self.bonus_tracker = score_object.get_current_bonus()
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -30,11 +34,19 @@ class Player(CircleShape):
     def update(self, dt):
         # ------Shot cooldown------
         self.shot_timer -= dt
-        # ------Boost management------
+        # ------State management------
         if self.boost_timer > 0:
             self.boost_timer -= dt
             if self.boost_timer <= 0:
                 self.boosted = False
+        
+        if self.immune_timer > 0:
+            self.immune_timer -= dt
+        # ------Bonus Tracker-----
+        self.bonus_tracker = self.score_object.get_current_bonus()
+        if self.bonus_tracker >= 500:
+            self.score_object.reset_bonus()
+            self.life += 1 if (self.life < 3) else 0
         # ------Movement management------
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -64,5 +76,8 @@ class Player(CircleShape):
             shot2.velocity = pygame.Vector2(0, 1).rotate(self.rotation + 20) * PLAYER_SHOOT_SPEED
             shot3.velocity = pygame.Vector2(0, 1).rotate(self.rotation - 20) * PLAYER_SHOOT_SPEED
         self.shot_timer = PLAYER_SHOOT_COOLDOWN
+
+    def get_life(self):
+        return self.life
 
         

@@ -1,6 +1,6 @@
 import pygame
 
-class character(pygame.sprite.Sprite):
+class Character(pygame.sprite.Sprite):
     def __init__(self, x, y, type, colour):
         super().__init__()
         self.position = pygame.Vector2(x, y)

@@ -20,7 +20,7 @@ class Score_Display(Display):
         letters = []
         spacing = 0
         for item in needed:
-            letter = character(self.position.x + spacing, self.position.y, item, "blue")
+            letter = Character(self.position.x + spacing, self.position.y, item, "blue")
             letters.append(letter)
             spacing += 30
         for letter in letters:
@@ -33,7 +33,7 @@ class Score_Display(Display):
             split_score.append(char)
         score_to_print = []
         for item in split_score:
-            number = character(self.position.x + spacing, self.position.y, item, "blue")
+            number = Character(self.position.x + spacing, self.position.y, item, "blue")
             score_to_print.append(number)
             spacing += 30
         for number in score_to_print:

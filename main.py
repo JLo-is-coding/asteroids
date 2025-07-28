@@ -10,6 +10,7 @@ from shot import Shot
 from score import Score
 from character import *
 from score_display import *
+from life_display import Life_Display
 
 def main():
     # ----- Game Start-up -----
@@ -35,11 +36,18 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     Spawnfield.containers = (updatable)
     Pickup.containers = (pickups, drawable)
-    Score_Display.containers = (drawable, updatable)
+    Display.containers = (drawable, updatable)
  
-    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+   # refine containers to be cleaner
+
     score_total = Score()
+    player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, score_total )
     score_display = Score_Display(20, 700, score_total)
+    score_display.updatable_group = updatable
+    score_display.drawable_group = drawable
+    life_display = Life_Display(20, 60, player)
+    life_display.updatable_group = updatable
+    life_display.drawable_group = drawable
     asteroid_field = AsteroidField()
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
@@ -54,6 +62,10 @@ def main():
         for object in asteroids:
             collision = object.collide(player)
             if collision:
+                if player.immune_timer <= 0:
+                    player.immune_timer = 2
+                    player.life -= 1
+            if player.life <= 0:
                 print ("Game over!")
                 print (f"You Destroyed {score_total.score} Asteroids")
                 sys.exit()
