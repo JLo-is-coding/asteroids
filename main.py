@@ -12,6 +12,8 @@ from character import *
 from score_display import *
 from life_display import Life_Display
 
+from heartshape import Heartshape
+
 def main():
     # ----- Game Start-up -----
     pygame.init()
@@ -52,6 +54,8 @@ def main():
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
     spawn_field.drawable_group = drawable
+
+    heart = Heartshape(160, 60)
 
     # ----- Game Loop -----
     while 0 < 1:
