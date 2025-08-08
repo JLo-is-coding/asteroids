@@ -18,5 +18,5 @@ class Life_Display(Display):
         heart_icon = Heartshape(self.position.x + 20, self.position.y - 40)
         heart_icon.draw(screen)
         life_str = str(self.life_tracker)
-        number = Character(self.position.x + spacing, self.position.y, life_str, "blue")
+        number = Character(self.position.x + spacing, self.position.y, life_str, "white")
         number.draw(screen)

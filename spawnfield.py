@@ -1,7 +1,7 @@
 import pygame
 import random
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH, PICKUP_SPAWN_RATE
-from pick_ups import Shotgun_Pickup
+from pick_ups import Shotgun_Pickup, Ghost_pickup
 from main import *
 
 class Spawnfield(pygame.sprite.Sprite):
@@ -10,9 +10,10 @@ class Spawnfield(pygame.sprite.Sprite):
         self.pickup_cooldown = 0.0
 
     def spawn(self, x, y):
-        shot_pack = Shotgun_Pickup(x, y)
-        self.pickup_group.add(shot_pack)
-        self.drawable_group.add(shot_pack)
+        pickups = [Shotgun_Pickup(x,y), Ghost_pickup(x,y)]
+        item_pack = random.choice(pickups)
+        self.pickup_group.add(item_pack)
+        self.drawable_group.add(item_pack)
 
     def update(self, dt):
         self.pickup_cooldown += dt

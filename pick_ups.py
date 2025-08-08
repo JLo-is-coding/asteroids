@@ -26,7 +26,16 @@ class Pickup(pygame.sprite.Sprite):
 class Shotgun_Pickup(Pickup):
     def __init__(self, x, y):
         super().__init__(x, y)
+        self.buff = "shotgun"
         
 
     def draw(self, screen):
         pygame.draw.rect(screen, "yellow", self.rect, 2, 0, 10, 10 )
+
+class Ghost_pickup(Pickup):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.buff = "ghost"
+
+    def draw(self, screen):
+        pygame.draw.rect(screen, "grey", self.rect, 2, 0, 10, 10, 10, 10)

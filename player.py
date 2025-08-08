@@ -8,12 +8,13 @@ from shot import Shot
 class Player(CircleShape):
     def __init__(self, x, y, score_object):
         super().__init__(x, y, PLAYER_RADIUS)
+        self.colour = "white"
         self.rotation = 0
         self.shot_timer = 0
         self.life = 1
         self.immune_timer = 0
-        self.boosted = False
-        self.boost_timer = 0
+        self.buff_state = "normal"
+        self.buff_timer = 0
         self.score_object = score_object
         self.bonus_tracker = score_object.get_current_bonus()
 
@@ -26,7 +27,7 @@ class Player(CircleShape):
         return [a, b, c]
     
     def draw(self, screen):
-        pygame.draw.polygon(screen, "white", self.triangle(), 2)
+        pygame.draw.polygon(screen, self.colour, self.triangle(), 2)
 
     def rotate(self, dt):
          self.rotation += PLAYER_TURN_SPEED * dt
@@ -35,11 +36,16 @@ class Player(CircleShape):
         # ------Shot cooldown------
         self.shot_timer -= dt
         # ------State management------
-        if self.boost_timer > 0:
-            self.boost_timer -= dt
-            if self.boost_timer <= 0:
-                self.boosted = False
-        
+        if self.buff_timer > 0:
+            self.buff_timer -= dt
+            if self.buff_timer <= 0:
+                self.buff_state = "normal"
+                self.colour = "white"
+
+        if self.buff_state == "ghost":
+            self.immune_timer = 0.1
+            self.colour = "blue"
+
         if self.immune_timer > 0:
             self.immune_timer -= dt
         # ------Bonus Tracker-----
@@ -70,7 +76,7 @@ class Player(CircleShape):
     def shoot(self):
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        if self.boosted:
+        if self.buff_state == "shotgun":
             shot2 = Shot(self.position.x, self.position.y)
             shot3 = Shot(self.position.x, self.position.y)
             shot2.velocity = pygame.Vector2(0, 1).rotate(self.rotation + 20) * PLAYER_SHOOT_SPEED
@@ -79,5 +85,4 @@ class Player(CircleShape):
 
     def get_life(self):
         return self.life
-
         

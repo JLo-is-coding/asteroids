@@ -38,18 +38,13 @@ def main():
     Shot.containers = (shots, updatable, drawable)
     Spawnfield.containers = (updatable)
     Pickup.containers = (pickups, drawable)
-    Display.containers = (drawable, updatable)
- 
-   # refine containers to be cleaner
+    Score_Display.containers = (drawable, updatable)
+    Life_Display.containers = (drawable, updatable)
 
     score_total = Score()
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, score_total )
     score_display = Score_Display(20, 700, score_total)
-    score_display.updatable_group = updatable
-    score_display.drawable_group = drawable
     life_display = Life_Display(20, 60, player)
-    life_display.updatable_group = updatable
-    life_display.drawable_group = drawable
     asteroid_field = AsteroidField()
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
@@ -84,8 +79,8 @@ def main():
             collision = object.collide(player)
             if collision:
                 object.kill()
-                player.boosted = True
-                player.boost_timer = 10
+                player.buff_state = object.buff
+                player.buff_timer = 10
         screen.fill("black")
         for item in drawable:
             item.draw(screen)
