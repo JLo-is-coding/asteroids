@@ -6,6 +6,7 @@ from shot import Shot
 
 #rejigg how this works, this pissin me off!
 deactivate = [0]
+#-------------------------------------------
 
 class Player(CircleShape):
     def __init__(self, x, y, score_object):
@@ -17,7 +18,7 @@ class Player(CircleShape):
         self.immune_timer = 0
         self.buff_state = "normal"
         self.buff_timer = 0
-        self.weapon_state = "normal"
+        self.weapon_state = "basic"
         self.weapon_state_timer = 0
         self.score_object = score_object
 
@@ -39,9 +40,6 @@ class Player(CircleShape):
         self.shot_timer -= dt
         self.manage_state(dt)
         self.check_for_bonus(deactivate)
-
-        print(f"player buff timer = {self.buff_timer}")
-        print(f"player immunity timer ={self.immune_timer}")
         
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -63,15 +61,25 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
 
     #------Shoot Package-------
-    def shoot(self):
-        #create a function here that checks which weapon state is being used
+    def shoot_shotgun(self):
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
-        if self.buff_state == "shotgun":
-            shot2 = Shot(self.position.x, self.position.y)
-            shot3 = Shot(self.position.x, self.position.y)
-            shot2.velocity = pygame.Vector2(0, 1).rotate(self.rotation + 20) * PLAYER_SHOOT_SPEED
-            shot3.velocity = pygame.Vector2(0, 1).rotate(self.rotation - 20) * PLAYER_SHOOT_SPEED
+        shot2 = Shot(self.position.x, self.position.y)
+        shot2.velocity = pygame.Vector2(0, 1).rotate(self.rotation + 20) * PLAYER_SHOOT_SPEED
+        shot3 = Shot(self.position.x, self.position.y)
+        shot3.velocity = pygame.Vector2(0, 1).rotate(self.rotation - 20) * PLAYER_SHOOT_SPEED
+
+    def shoot_basic(self):
+        shot = Shot(self.position.x, self.position.y)
+        shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
+
+    def shoot(self):
+        if self.weapon_state != "basic":
+            print(f"weapon state is {self.weapon_state}")
+            if self.weapon_state == "shotgun":
+                self.shoot_shotgun() 
+        else:
+            self.shoot_basic()
         self.shot_timer = PLAYER_SHOOT_COOLDOWN
 
     #------State Management Package-----
@@ -80,7 +88,7 @@ class Player(CircleShape):
         self.buff_state = "normal"
 
     def revert_weapon_state(self):
-        self.weapon_state = "normal"  
+        self.weapon_state = "basic"  
     
     def manage_state(self, dt):
         if self.buff_timer > 0:
@@ -89,7 +97,7 @@ class Player(CircleShape):
             self.revert_buff_state()
         
         if self.weapon_state_timer > 0:
-            self.buff_timer -= dt
+            self.weapon_state_timer -= dt
         if self.weapon_state_timer <= 0:
             self.revert_weapon_state()
 

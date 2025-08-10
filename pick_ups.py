@@ -28,6 +28,7 @@ class Pickup(pygame.sprite.Sprite):
         # overwrite
         pass
 
+# crack on with weapon state code
 class Shotgun_Pickup(Pickup):
     def __init__(self, x, y):
         super().__init__(x, y)
@@ -36,6 +37,10 @@ class Shotgun_Pickup(Pickup):
 
     def draw(self, screen):
         pygame.draw.rect(screen, "yellow", self.rect, 2, 0, 10, 10 )
+
+    def grant_buff(self, player):
+        player.weapon_state_timer = 8
+        player.weapon_state = "shotgun"
 
 class Ghost_pickup(Pickup):
     def __init__(self, x, y):

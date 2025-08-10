@@ -78,8 +78,8 @@ def main():
         for object in pickups:
             collision = object.collide(player)
             if collision:
-                object.kill()
                 player.buff_state = object.grant_buff(player)
+                object.kill()
         screen.fill("black")
         for item in drawable:
             item.draw(screen)
