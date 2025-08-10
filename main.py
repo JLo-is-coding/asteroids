@@ -79,8 +79,7 @@ def main():
             collision = object.collide(player)
             if collision:
                 object.kill()
-                player.buff_state = object.buff
-                player.buff_timer = 10
+                player.buff_state = object.grant_buff(player)
         screen.fill("black")
         for item in drawable:
             item.draw(screen)

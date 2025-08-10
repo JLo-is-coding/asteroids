@@ -1,5 +1,6 @@
 import pygame
 import random
+from player import Player
 
 class Pickup(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -22,6 +23,10 @@ class Pickup(pygame.sprite.Sprite):
         distance_squared = distance_x * distance_x + distance_y * distance_y
         
         return distance_squared < (player.radius * player.radius)
+    
+    def grant_buff(self, player):
+        # overwrite
+        pass
 
 class Shotgun_Pickup(Pickup):
     def __init__(self, x, y):
@@ -39,3 +44,8 @@ class Ghost_pickup(Pickup):
 
     def draw(self, screen):
         pygame.draw.rect(screen, "grey", self.rect, 2, 0, 10, 10, 10, 10)
+
+    def grant_buff(self, player):
+        player.buff_timer = 10
+        player.immune_timer = 10
+        player.colour = "blue"

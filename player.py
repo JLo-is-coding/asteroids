@@ -2,8 +2,10 @@ import pygame
 from circleshape import CircleShape
 from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 import random
-
 from shot import Shot
+
+#rejigg how this works, this pissin me off!
+deactivate = [0]
 
 class Player(CircleShape):
     def __init__(self, x, y, score_object):
@@ -15,8 +17,9 @@ class Player(CircleShape):
         self.immune_timer = 0
         self.buff_state = "normal"
         self.buff_timer = 0
+        self.weapon_state = "normal"
+        self.weapon_state_timer = 0
         self.score_object = score_object
-        self.bonus_tracker = score_object.get_current_bonus()
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -33,27 +36,13 @@ class Player(CircleShape):
          self.rotation += PLAYER_TURN_SPEED * dt
 
     def update(self, dt):
-        # ------Shot cooldown------
         self.shot_timer -= dt
-        # ------State management------
-        if self.buff_timer > 0:
-            self.buff_timer -= dt
-            if self.buff_timer <= 0:
-                self.buff_state = "normal"
-                self.colour = "white"
+        self.manage_state(dt)
+        self.check_for_bonus(deactivate)
 
-        if self.buff_state == "ghost":
-            self.immune_timer = 0.1
-            self.colour = "blue"
-
-        if self.immune_timer > 0:
-            self.immune_timer -= dt
-        # ------Bonus Tracker-----
-        self.bonus_tracker = self.score_object.get_current_bonus()
-        if self.bonus_tracker >= 500:
-            self.score_object.reset_bonus()
-            self.life += 1 if (self.life < 3) else 0
-        # ------Movement management------
+        print(f"player buff timer = {self.buff_timer}")
+        print(f"player immunity timer ={self.immune_timer}")
+        
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             self.rotate(-dt)
@@ -73,7 +62,9 @@ class Player(CircleShape):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
+    #------Shoot Package-------
     def shoot(self):
+        #create a function here that checks which weapon state is being used
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
         if self.buff_state == "shotgun":
@@ -83,6 +74,39 @@ class Player(CircleShape):
             shot3.velocity = pygame.Vector2(0, 1).rotate(self.rotation - 20) * PLAYER_SHOOT_SPEED
         self.shot_timer = PLAYER_SHOOT_COOLDOWN
 
+    #------State Management Package-----
+    def revert_buff_state(self):
+        self.colour = "white"
+        self.buff_state = "normal"
+
+    def revert_weapon_state(self):
+        self.weapon_state = "normal"  
+    
+    def manage_state(self, dt):
+        if self.buff_timer > 0:
+            self.buff_timer -= dt
+        if self.buff_timer  <= 0:
+            self.revert_buff_state()
+        
+        if self.weapon_state_timer > 0:
+            self.buff_timer -= dt
+        if self.weapon_state_timer <= 0:
+            self.revert_weapon_state()
+
+        if self.immune_timer > 0:
+            self.immune_timer -= dt
+
+    #------Life Package------
     def get_life(self):
         return self.life
-        
+    
+    def gain_bonus_life(self):
+        self.life += 1 if (self.life < 3) else 0
+
+    # Use recursive function to create next bonus item (from modulo) then give the bonus when its equal to 
+    # or greater than the bonus (calling recursion again to find the next bonus number)
+    def check_for_bonus(self, deactivate_for_bonus):
+        if (self.score_object.get_current_bonus() % 20 == 0) and (self.score_object.get_current_bonus() not in deactivate_for_bonus):
+            deactivate_for_bonus.append(self.score_object.get_current_bonus())
+            print(f"the updated vrsion of deactivate is {deactivate_for_bonus}")
+            self.gain_bonus_life()
