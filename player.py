@@ -4,10 +4,6 @@ from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHO
 import random
 from shot import Shot
 
-#rejigg how this works, this pissin me off!
-deactivate = [0]
-#-------------------------------------------
-
 class Player(CircleShape):
     def __init__(self, x, y, score_object):
         super().__init__(x, y, PLAYER_RADIUS)
@@ -39,8 +35,8 @@ class Player(CircleShape):
     def update(self, dt):
         self.shot_timer -= dt
         self.manage_state(dt)
-        self.check_for_bonus(deactivate)
-        
+        self.check_bonus_requirements(self.score_object)
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             self.rotate(-dt)
@@ -60,7 +56,7 @@ class Player(CircleShape):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
 
-    #------Shoot Package-------
+    #------Weapons Package-------
     def shoot_shotgun(self):
         shot = Shot(self.position.x, self.position.y)
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
@@ -74,12 +70,10 @@ class Player(CircleShape):
         shot.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * PLAYER_SHOOT_SPEED
 
     def shoot(self):
-        if self.weapon_state != "basic":
-            print(f"weapon state is {self.weapon_state}")
-            if self.weapon_state == "shotgun":
-                self.shoot_shotgun() 
-        else:
+        if self.weapon_state == "basic":
             self.shoot_basic()
+        elif self.weapon_state == "shotgun":
+            self.shoot_shotgun() 
         self.shot_timer = PLAYER_SHOOT_COOLDOWN
 
     #------State Management Package-----
@@ -111,10 +105,8 @@ class Player(CircleShape):
     def gain_bonus_life(self):
         self.life += 1 if (self.life < 3) else 0
 
-    # Use recursive function to create next bonus item (from modulo) then give the bonus when its equal to 
-    # or greater than the bonus (calling recursion again to find the next bonus number)
-    def check_for_bonus(self, deactivate_for_bonus):
-        if (self.score_object.get_current_bonus() % 20 == 0) and (self.score_object.get_current_bonus() not in deactivate_for_bonus):
-            deactivate_for_bonus.append(self.score_object.get_current_bonus())
-            print(f"the updated vrsion of deactivate is {deactivate_for_bonus}")
+    #------Bonus Package------
+    def check_bonus_requirements(self, score_object):
+        if score_object.get_current_score() >= score_object.get_bonus_life_requirement():
             self.gain_bonus_life()
+            score_object.bonus_life_requirement += 500

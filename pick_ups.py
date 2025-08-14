@@ -51,6 +51,6 @@ class Ghost_pickup(Pickup):
         pygame.draw.rect(screen, "grey", self.rect, 2, 0, 10, 10, 10, 10)
 
     def grant_buff(self, player):
-        player.buff_timer = 10
-        player.immune_timer = 10
+        player.buff_timer = 5
+        player.immune_timer = 5
         player.colour = "blue"

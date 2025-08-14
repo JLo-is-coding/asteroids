@@ -80,7 +80,7 @@ def main():
             if collision:
                 player.buff_state = object.grant_buff(player)
                 object.kill()
-        screen.fill("black")
+        screen.fill("black") 
         for item in drawable:
             item.draw(screen)
         pygame.display.flip()
