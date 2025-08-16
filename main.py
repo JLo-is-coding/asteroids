@@ -11,6 +11,7 @@ from score import Score
 from character import *
 from score_display import *
 from life_display import Life_Display
+from held_item_display import Held_Item_Display
 
 from heartshape import Heartshape
 
@@ -40,11 +41,14 @@ def main():
     Pickup.containers = (pickups, drawable)
     Score_Display.containers = (drawable, updatable)
     Life_Display.containers = (drawable, updatable)
+    Held_Item_Display.containers = (drawable, updatable)
 
     score_total = Score()
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, score_total )
     score_display = Score_Display(20, 700, score_total)
     life_display = Life_Display(20, 60, player)
+    item_display1 = Held_Item_Display(1100, 10, "Q", player, 0)
+    item_display2 = Held_Item_Display(1190, 10, "E", player, 1)
     asteroid_field = AsteroidField()
     spawn_field = Spawnfield()
     spawn_field.pickup_group = pickups
@@ -78,8 +82,12 @@ def main():
         for object in pickups:
             collision = object.collide(player)
             if collision:
-                player.buff_state = object.grant_buff(player)
-                object.kill()
+                if object.storable:
+                    player.add_to_inventory(object)
+                    object.kill()
+                else:    
+                    player.buff_state = object.grant_buff(player)
+                    object.kill()
         screen.fill("black") 
         for item in drawable:
             item.draw(screen)

@@ -11,6 +11,7 @@ class Player(CircleShape):
         self.rotation = 0
         self.shot_timer = 0
         self.life = 1
+        self.inventory = [None, None]
         self.immune_timer = 0
         self.buff_state = "normal"
         self.buff_timer = 0
@@ -46,6 +47,18 @@ class Player(CircleShape):
             self.move(dt)
         if keys[pygame.K_s]:
             self.move(-dt)
+        if keys[pygame.K_q]:
+            if self.inventory[0] == None:
+                pass
+            else:
+                self.inventory[0].grant_buff(self)
+                self.inventory[0] = None
+        if keys[pygame.K_e]:
+            if self.inventory[1] == None:
+                pass
+            else:
+                self.inventory[1].grant_buff(self)
+                self.inventory[1] = None
         if keys[pygame.K_SPACE]:
             if self.shot_timer > 0:
                 pass
@@ -98,6 +111,13 @@ class Player(CircleShape):
         if self.immune_timer > 0:
             self.immune_timer -= dt
 
+    #------Inventory Management------
+    def add_to_inventory(self, object):
+        if self.inventory[0] == None:
+            self.inventory[0] = object
+        elif self.inventory[1] == None:
+            self.inventory[1] = object
+        
     #------Life Package------
     def get_life(self):
         return self.life

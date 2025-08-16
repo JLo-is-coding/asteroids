@@ -9,6 +9,7 @@ class Pickup(pygame.sprite.Sprite):
         self.width = 20
         self.height = 35
         self.rect = pygame.Rect(x, y, self.width, self.height)
+        self.storable = False
 
     def draw(self, screen):
         #to be overwritten
@@ -46,6 +47,7 @@ class Ghost_pickup(Pickup):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.buff = "ghost"
+        self.storable = True
 
     def draw(self, screen):
         pygame.draw.rect(screen, "grey", self.rect, 2, 0, 10, 10, 10, 10)
