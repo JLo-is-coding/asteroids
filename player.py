@@ -48,15 +48,11 @@ class Player(CircleShape):
         if keys[pygame.K_s]:
             self.move(-dt)
         if keys[pygame.K_q]:
-            if self.inventory[0] == None:
-                pass
-            else:
+            if self.inventory[0] != None:
                 self.inventory[0].grant_buff(self)
                 self.inventory[0] = None
         if keys[pygame.K_e]:
-            if self.inventory[1] == None:
-                pass
-            else:
+            if self.inventory[1] != None:
                 self.inventory[1].grant_buff(self)
                 self.inventory[1] = None
         if keys[pygame.K_SPACE]:
@@ -113,10 +109,10 @@ class Player(CircleShape):
 
     #------Inventory Management------
     def add_to_inventory(self, object):
-        if self.inventory[0] == None:
-            self.inventory[0] = object
-        elif self.inventory[1] == None:
-            self.inventory[1] = object
+        for slot in range(0, len(self.inventory)):
+            if self.inventory[slot] == None:
+                self.inventory[slot] = object
+                return
         
     #------Life Package------
     def get_life(self):
@@ -130,3 +126,4 @@ class Player(CircleShape):
         if score_object.get_current_score() >= score_object.get_bonus_life_requirement():
             self.gain_bonus_life()
             score_object.bonus_life_requirement += 500
+

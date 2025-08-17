@@ -16,12 +16,10 @@ class Held_Item_Display(Display):
         self.player_object = player
 
     def draw(self, screen):
-        #Displays anchored on the top left corner
         pygame.draw.rect(screen, "white", self.outer_rect, 1, 1, 1, 1, 1)
         pygame.draw.rect(screen, "white", self.inner_rect, 3, 1, 1, 1, 1)
         key_press = Character(self.position.x+((self.width/2)-5), self.position.y+self.height+30, self.hotkey, "white", 10, 20)
         key_press.draw(screen)
-        #print(self.player_object.inventory)
-        #print(self.inventory_slot)
         if self.player_object.inventory[self.inventory_slot]:
-            pygame.draw.circle(screen, "pink", (self.position.x+40, self.position.y+40), 20)
+            buff_item = self.player_object.inventory[self.inventory_slot]
+            buff_item.draw_icon(screen, self.position.x+40-(buff_item.width/2), self.position.y+40-(buff_item.height/2))

@@ -52,6 +52,9 @@ class Ghost_pickup(Pickup):
     def draw(self, screen):
         pygame.draw.rect(screen, "grey", self.rect, 2, 0, 10, 10, 10, 10)
 
+    def draw_icon(self, screen, x, y):
+        pygame.draw.rect(screen, "grey", (x, y, self.width, self.height), 2, 0, 10, 10, 10, 10)
+
     def grant_buff(self, player):
         player.buff_timer = 5
         player.immune_timer = 5
