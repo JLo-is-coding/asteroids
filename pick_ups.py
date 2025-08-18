@@ -1,6 +1,7 @@
 import pygame
 import random
 from player import Player
+from notif_display import Notification
 
 class Pickup(pygame.sprite.Sprite):
     def __init__(self, x, y):
@@ -34,7 +35,6 @@ class Shotgun_Pickup(Pickup):
     def __init__(self, x, y):
         super().__init__(x, y)
         self.buff = "shotgun"
-        
 
     def draw(self, screen):
         pygame.draw.rect(screen, "yellow", self.rect, 2, 0, 10, 10 )

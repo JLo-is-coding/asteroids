@@ -12,6 +12,7 @@ from character import *
 from score_display import *
 from life_display import Life_Display
 from held_item_display import Held_Item_Display
+from notif_display import Notification
 
 from heartshape import Heartshape
 
@@ -42,6 +43,8 @@ def main():
     Score_Display.containers = (drawable, updatable)
     Life_Display.containers = (drawable, updatable)
     Held_Item_Display.containers = (drawable, updatable)
+    Notification.containers = (drawable, updatable)
+    
 
     score_total = Score()
     player = Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, score_total )
@@ -88,6 +91,7 @@ def main():
                 else:    
                     player.buff_state = object.grant_buff(player)
                     object.kill()
+                    pickup_notif = Notification(500, 620, list(object.buff.upper()))
         screen.fill("black") 
         for item in drawable:
             item.draw(screen)

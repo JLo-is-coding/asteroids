@@ -3,6 +3,7 @@ from circleshape import CircleShape
 from constants import PLAYER_RADIUS, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 import random
 from shot import Shot
+from notif_display import Notification
 
 class Player(CircleShape):
     def __init__(self, x, y, score_object):
@@ -49,10 +50,12 @@ class Player(CircleShape):
             self.move(-dt)
         if keys[pygame.K_q]:
             if self.inventory[0] != None:
+                item_notification = Notification(500, 620, list(self.inventory[0].buff.upper()))
                 self.inventory[0].grant_buff(self)
                 self.inventory[0] = None
         if keys[pygame.K_e]:
             if self.inventory[1] != None:
+                item_notification = Notification(500, 620, list(self.inventory[1].buff.upper()))
                 self.inventory[1].grant_buff(self)
                 self.inventory[1] = None
         if keys[pygame.K_SPACE]:
@@ -125,5 +128,6 @@ class Player(CircleShape):
     def check_bonus_requirements(self, score_object):
         if score_object.get_current_score() >= score_object.get_bonus_life_requirement():
             self.gain_bonus_life()
+            bonus_life_notification = Notification(500, 620, ["E","X","T","R","A"," ","L","I","F","E"])
             score_object.bonus_life_requirement += 500
 

@@ -2,13 +2,14 @@ import pygame
 from constants import *
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, x, y, type, colour, font_width=20, font_height=40):
+    def __init__(self, x, y, type, colour, font_width=20, font_height=40, line_width=3):
         super().__init__()
         self.position = pygame.Vector2(x, y)
         self.type = type
         self.colour = colour
         self.font_width = font_width   
         self.font_height = font_height
+        self.line_width = line_width
         self.characters = {
 # ===========================================================================
 # A L P H A B E T
@@ -26,7 +27,26 @@ class Character(pygame.sprite.Sprite):
                 (self.position.x +self.font_width, self.position.y -(self.font_height/2)),
                 (self.position.x, self.position.y -(self.font_height/2)),
                 (self.position.x, self.position.y -self.font_height),
-                (self.position.x +self.font_width, self.position.y -self.font_height)],    
+                (self.position.x +self.font_width, self.position.y -self.font_height)],
+
+        "G" :   [(self.position.x+self.font_width, self.position.y-self.font_height),
+                (self.position.x, self.position.y-self.font_height),
+                (self.position.x, self.position.y),
+                (self.position.x+self.font_width, self.position.y),
+                (self.position.x+self.font_width, self.position.y-self.font_height/2),
+                (self.position.x+self.font_width/2, self.position.y-self.font_height/2)],
+
+        "H" :   [(self.position.x, self.position.y),
+                (self.position.x, self.position.y-self.font_height),
+                (self.position.x, self.position.y-self.font_height/2),
+                (self.position.x+self.font_width, self.position.y-self.font_height/2),
+                (self.position.x+self.font_width, self.position.y-self.font_height),
+                (self.position.x+self.font_width, self.position.y)],
+
+        "N" :   [(self.position.x, self.position.y),
+                (self.position.x, self.position.y-self.font_height),
+                (self.position.x+self.font_width, self.position.y),
+                (self.position.x+self.font_width, self.position.y-self.font_height)],
 
         "O" :   [(self.position.x, self.position.y),
                 (self.position.x +self.font_width, self.position.y),
@@ -60,6 +80,16 @@ class Character(pygame.sprite.Sprite):
                 (self.position.x, self.position.y -(self.font_height/2)),
                 (self.position.x, self.position.y -self.font_height),
                 (self.position.x +self.font_width, self.position.y -self.font_height)],
+
+        "T" :   [(self.position.x+font_width/2, self.position.y),
+                (self.position.x+font_width/2, self.position.y-self.font_height),
+                (self.position.x+font_width, self.position.y-self.font_height),
+                (self.position.x, self.position.y-self.font_height)],
+
+        "U" :   [(self.position.x, self.position.y-self.font_height),
+                (self.position.x, self.position.y),
+                (self.position.x+font_width, self.position.y),
+                (self.position.x+font_width, self.position.y-self.font_height)],
 
 # ============================================================================
 # N U M B E R S
@@ -131,10 +161,11 @@ class Character(pygame.sprite.Sprite):
     
 
     def draw(self, screen):
+        #draw from the bottom left corner of the display
         pygame.draw.lines(
             screen, 
             self.colour, 
             False, 
             self.characters[self.type],
-            3
+            self.line_width
         )
